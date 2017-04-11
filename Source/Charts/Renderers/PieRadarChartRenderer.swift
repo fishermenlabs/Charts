@@ -155,62 +155,39 @@ open class PieRadarChartRenderer: DataRenderer
                     
                     let accountForWebSliceSpacing = webSliceSpace > 0.0 && sliceAngle <= 180.0
 
-                    let webSliceSpaceAngleOuter = visibleAngleCount == 1 ?
-                        0.0 :
-                        webSliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
-                    
-                    let webStartAngleOuter = rotationAngle + (angle + webSliceSpaceAngleOuter / 2.0) * CGFloat(phaseY) - 1
-                    var webSweepAngleOuter = (sliceAngle - webSliceSpaceAngleOuter) * CGFloat(phaseY)
-                    if webSweepAngleOuter < 0.0
-                    {
-                        webSweepAngleOuter = 0.0
-                    }
-                    
-                    let webArcStartPointX = center.x + radius * cos(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
-                    let webArcStartPointY = center.y + radius * sin(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
-            
-                    context.setFillColor(chart.webColor.cgColor)
-                    
-                    let webPath = CGMutablePath()
-                    
-                    webPath.move(to: CGPoint(x: webArcStartPointX,
-                                          y: webArcStartPointY))
-                    
-                    webPath.addRelativeArc(center: center, radius: sliceRadius, startAngle: webStartAngleOuter * ChartUtils.Math.FDEG2RAD, delta: webSweepAngleOuter * ChartUtils.Math.FDEG2RAD)
-                    
                     if accountForWebSliceSpacing
                     {
-                        let angleMiddle = webStartAngleOuter + webSweepAngleOuter / 2.0
                         
-                        let sliceSpaceOffset =
-                            calculateMinimumRadiusForSpacedSlice(
-                                center: center,
-                                radius: radius,
-                                angle: sliceAngle * CGFloat(phaseY),
-                                arcStartPointX: webArcStartPointX,
-                                arcStartPointY: webArcStartPointY,
-                                startAngle: webStartAngleOuter,
-                                sweepAngle: webSweepAngleOuter)
+                        let webSliceSpaceAngleOuter = visibleAngleCount == 1 ?
+                            0.0 :
+                            webSliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
                         
-                        let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
-                        let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                        let webStartAngleOuter = rotationAngle + angle * CGFloat(phaseY)
+                        var webSweepAngleOuter = (sliceAngle - webSliceSpaceAngleOuter) * CGFloat(phaseY)
+                        if webSweepAngleOuter < 0.0
+                        {
+                            webSweepAngleOuter = 0.0
+                        }
                         
-                        webPath.addLine(
-                            to: CGPoint(
-                                x: arcEndPointX,
-                                y: arcEndPointY))
-                    }
-                    else
-                    {
+                        let webArcStartPointX = center.x + radius * cos(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        let webArcStartPointY = center.y + radius * sin(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        
+                        context.setStrokeColor(chart.webColor.cgColor)
+                        context.setLineWidth(chart.webLineWidth)
+                        let webPath = CGMutablePath()
+                        
+                        webPath.move(to: CGPoint(x: webArcStartPointX,
+                                                 y: webArcStartPointY))
+  
                         webPath.addLine(to: center)
+                        
+                        webPath.closeSubpath()
+                        
+                        context.beginPath()
+                        context.addPath(webPath)
+                        context.strokePath()
                     }
-                    
-                    webPath.closeSubpath()
-                    
-                    context.beginPath()
-                    context.addPath(webPath)
-                    context.fillPath(using: .evenOdd)
-                    
+                 
                     // now draw the data slice
                     
                     let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
