@@ -54,7 +54,11 @@ open class PieRadarChartView: PieRadarChartViewBase
     /// transparency the grid is drawn with (0.0 - 1.0)
     open var webAlpha: CGFloat = 150.0 / 255.0
     
+    /// number of web elipses
     open var webLineAmount = 5
+    
+    /// width of the web slice between data slices
+    open var webSliceSpace: CGFloat = 5.0
     
     /// flag indicating if the web lines should be drawn or not
     open var drawWeb = true
