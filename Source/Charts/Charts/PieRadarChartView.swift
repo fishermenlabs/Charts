@@ -63,6 +63,9 @@ open class PieRadarChartView: PieRadarChartViewBase
     /// flag indicating if the web lines should be drawn or not
     open var drawWeb = true
     
+    /// flag indicating if the background slices should be drawn
+    open var drawBackgroundSlices = true
+    
     public override init(frame: CGRect)
     {
         super.init(frame: frame)

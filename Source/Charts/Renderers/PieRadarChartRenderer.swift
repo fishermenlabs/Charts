@@ -188,7 +188,71 @@ open class PieRadarChartRenderer: DataRenderer
                         context.strokePath()
                     }
                  
-                    // now draw the data slice
+                    // now draw the data slices
+                    
+                    // draw background slices if needed
+                    if chart.drawBackgroundSlices {
+                        
+                        let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
+                        
+                        let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
+                            0.0 :
+                            sliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
+                        
+                        let startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.0) * CGFloat(phaseY)
+                        var sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * CGFloat(phaseY)
+                        if sweepAngleOuter < 0.0
+                        {
+                            sweepAngleOuter = 0.0
+                        }
+                        
+                        let arcStartPointX = center.x + radius * cos(startAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        let arcStartPointY = center.y + radius * sin(startAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        
+                        context.setFillColor(dataSet.color(atIndex: j).withAlphaComponent(0.1).cgColor)
+                        
+                        let path = CGMutablePath()
+                        
+                        path.move(to: CGPoint(x: arcStartPointX,
+                                              y: arcStartPointY))
+                        
+                        path.addRelativeArc(center: center, radius: CGFloat(chart.range), startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        
+                        if accountForSliceSpacing
+                        {
+                            let angleMiddle = startAngleOuter + sweepAngleOuter / 2.0
+                            
+                            let sliceSpaceOffset =
+                                calculateMinimumRadiusForSpacedSlice(
+                                    center: center,
+                                    radius: radius,
+                                    angle: sliceAngle * CGFloat(phaseY),
+                                    arcStartPointX: arcStartPointX,
+                                    arcStartPointY: arcStartPointY,
+                                    startAngle: startAngleOuter,
+                                    sweepAngle: sweepAngleOuter)
+                            
+                            let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                            let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                            
+                            path.addLine(
+                                to: CGPoint(
+                                    x: arcEndPointX,
+                                    y: arcEndPointY))
+                        }
+                        else
+                        {
+                            path.addLine(to: center)
+                        }
+                        
+                        path.closeSubpath()
+                        
+                        context.beginPath()
+                        context.addPath(path)
+                        context.fillPath(using: .evenOdd)
+                    }
+                    
+                    // draw data slice
                     
                     let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
                     
