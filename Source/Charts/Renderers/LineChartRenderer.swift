@@ -693,7 +693,11 @@ open class LineChartRenderer: LineRadarRenderer
                     
                     if drawCircleHole
                     {
-                        context.setFillColor(dataSet.circleHoleColor!.cgColor)
+                        if let lastCircleColor = dataSet.lastCircleColor, j == dataSet.entryCount - 1 {
+                            context.setFillColor(lastCircleColor.cgColor)
+                        } else {
+                            context.setFillColor(dataSet.circleHoleColor!.cgColor)
+                        }
                      
                         // The hole rect
                         rect.origin.x = pt.x - circleHoleRadius
