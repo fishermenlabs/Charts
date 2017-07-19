@@ -121,6 +121,8 @@ open class PieRadarChartRenderer: DataRenderer
         let drawRadii = chart.drawRadii
         let center = chart.centerCircleBox
         let radius = chart.radius
+        let webLineAmount = CGFloat(chart.webLineAmount)
+        let webSection: CGFloat = radius / webLineAmount
         
         var visibleAngleCount = 0
         for j in 0 ..< entryCount
@@ -139,7 +141,7 @@ open class PieRadarChartRenderer: DataRenderer
         
         for j in 0 ..< entryCount
         {
-
+            
             let sliceRadius = drawRadii[j]
             let sliceAngle = drawAngles[j]
             
@@ -154,7 +156,7 @@ open class PieRadarChartRenderer: DataRenderer
                     // draw the web slice first
                     
                     let accountForWebSliceSpacing = webSliceSpace > 0.0 && sliceAngle <= 180.0
-
+                    
                     if accountForWebSliceSpacing
                     {
                         
@@ -178,7 +180,7 @@ open class PieRadarChartRenderer: DataRenderer
                         
                         webPath.move(to: CGPoint(x: webArcStartPointX,
                                                  y: webArcStartPointY))
-  
+                        
                         webPath.addLine(to: center)
                         
                         webPath.closeSubpath()
@@ -187,7 +189,7 @@ open class PieRadarChartRenderer: DataRenderer
                         context.addPath(webPath)
                         context.strokePath()
                     }
-                 
+                    
                     // now draw the data slices
                     
                     // draw background slices if needed
@@ -216,7 +218,7 @@ open class PieRadarChartRenderer: DataRenderer
                         path.move(to: CGPoint(x: arcStartPointX,
                                               y: arcStartPointY))
                         
-                        path.addRelativeArc(center: center, radius: CGFloat(chart.range), startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        path.addRelativeArc(center: center, radius: radius - webSection, startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
                         
                         if accountForSliceSpacing
                         {
@@ -277,7 +279,7 @@ open class PieRadarChartRenderer: DataRenderer
                     path.move(to: CGPoint(x: arcStartPointX,
                                           y: arcStartPointY))
                     
-                    path.addRelativeArc(center: center, radius: sliceRadius, startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
+                    path.addRelativeArc(center: center, radius: sliceRadius * webSection, startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
                     
                     if accountForSliceSpacing
                     {
@@ -305,7 +307,7 @@ open class PieRadarChartRenderer: DataRenderer
                     {
                         path.addLine(to: center)
                     }
-                
+                    
                     path.closeSubpath()
                     
                     context.beginPath()
@@ -759,14 +761,14 @@ open class PieRadarChartRenderer: DataRenderer
         
         let minSize = chart.circleBox.width / CGFloat(chart.webLineAmount)
         let rect = chart.circleBox
-
+        
         for j in 0 ..< chart.webLineAmount
         {
             let inset = minSize * CGFloat(j + 1)
             context.addEllipse(in: rect.insetBy(dx: inset / 2, dy: inset / 2))
         }
         context.strokePath()
-
+        
         context.restoreGState()
     }
 }
