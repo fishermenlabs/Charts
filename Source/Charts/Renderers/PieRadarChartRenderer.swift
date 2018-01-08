@@ -18,7 +18,7 @@ open class PieRadarChartRenderer: DataRenderer
 {
     open weak var chart: PieRadarChartView?
     
-    public init(chart: PieRadarChartView?, animator: Animator?, viewPortHandler: ViewPortHandler?)
+    public init(chart: PieRadarChartView?, animator: Animator, viewPortHandler: ViewPortHandler)
     {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
         
@@ -55,12 +55,12 @@ open class PieRadarChartRenderer: DataRenderer
         let angleMiddle = startAngle + sweepAngle / 2.0
         
         // Other point of the arc
-        let arcEndPointX = center.x + radius * cos((startAngle + sweepAngle) * ChartUtils.Math.FDEG2RAD)
-        let arcEndPointY = center.y + radius * sin((startAngle + sweepAngle) * ChartUtils.Math.FDEG2RAD)
+        let arcEndPointX = center.x + radius * cos((startAngle + sweepAngle).DEG2RAD)
+        let arcEndPointY = center.y + radius * sin((startAngle + sweepAngle).DEG2RAD)
         
         // Middle point on the arc
-        let arcMidPointX = center.x + radius * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
-        let arcMidPointY = center.y + radius * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+        let arcMidPointX = center.x + radius * cos(angleMiddle.DEG2RAD)
+        let arcMidPointY = center.y + radius * sin(angleMiddle.DEG2RAD)
         
         // This is the base of the contained triangle
         let basePointsDistance = sqrt(
@@ -71,7 +71,7 @@ open class PieRadarChartRenderer: DataRenderer
         //   the angle of the contained triangle should stay the same.
         // So let's find out the height of that triangle.
         let containedTriangleHeight = (basePointsDistance / 2.0 *
-            tan((180.0 - angle) / 2.0 * ChartUtils.Math.FDEG2RAD))
+            tan(((180.0 - angle) / 2.0).DEG2RAD))
         
         // Now we subtract that from the radius
         var spacedRadius = radius - containedTriangleHeight
@@ -89,7 +89,6 @@ open class PieRadarChartRenderer: DataRenderer
     {
         guard
             dataSet.automaticallyDisableSliceSpacing,
-            let viewPortHandler = self.viewPortHandler,
             let data = chart?.data as? PieChartData
             else { return dataSet.sliceSpace }
         
@@ -106,8 +105,7 @@ open class PieRadarChartRenderer: DataRenderer
     open func drawDataSet(context: CGContext, dataSet: IPieChartDataSet)
     {
         guard
-            let chart = chart,
-            let animator = animator
+            let chart = chart
             else {return }
         
         var angle: CGFloat = 0.0
@@ -162,7 +160,7 @@ open class PieRadarChartRenderer: DataRenderer
                         
                         let webSliceSpaceAngleOuter = visibleAngleCount == 1 ?
                             0.0 :
-                            webSliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
+                            webSliceSpace / radius.DEG2RAD
                         
                         let webStartAngleOuter = rotationAngle + angle * CGFloat(phaseY)
                         var webSweepAngleOuter = (sliceAngle - webSliceSpaceAngleOuter) * CGFloat(phaseY)
@@ -171,8 +169,8 @@ open class PieRadarChartRenderer: DataRenderer
                             webSweepAngleOuter = 0.0
                         }
                         
-                        let webArcStartPointX = center.x + radius * cos(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
-                        let webArcStartPointY = center.y + radius * sin(webStartAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        let webArcStartPointX = center.x + radius * cos(webStartAngleOuter.DEG2RAD)
+                        let webArcStartPointY = center.y + radius * sin(webStartAngleOuter.DEG2RAD)
                         
                         context.setStrokeColor(chart.webColor.cgColor)
                         context.setLineWidth(chart.webLineWidth)
@@ -199,7 +197,7 @@ open class PieRadarChartRenderer: DataRenderer
                         
                         let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
                             0.0 :
-                            sliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
+                            sliceSpace / radius.DEG2RAD
                         
                         let startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.0) * CGFloat(phaseY)
                         var sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * CGFloat(phaseY)
@@ -208,8 +206,8 @@ open class PieRadarChartRenderer: DataRenderer
                             sweepAngleOuter = 0.0
                         }
                         
-                        let arcStartPointX = center.x + radius * cos(startAngleOuter * ChartUtils.Math.FDEG2RAD)
-                        let arcStartPointY = center.y + radius * sin(startAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        let arcStartPointX = center.x + radius * cos(startAngleOuter.DEG2RAD)
+                        let arcStartPointY = center.y + radius * sin(startAngleOuter.DEG2RAD)
                         
                         context.setFillColor(dataSet.color(atIndex: j).withAlphaComponent(0.1).cgColor)
                         
@@ -218,7 +216,7 @@ open class PieRadarChartRenderer: DataRenderer
                         path.move(to: CGPoint(x: arcStartPointX,
                                               y: arcStartPointY))
                         
-                        path.addRelativeArc(center: center, radius: radius - webSection, startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
+                        path.addRelativeArc(center: center, radius: radius - webSection, startAngle: startAngleOuter.DEG2RAD, delta: sweepAngleOuter.DEG2RAD)
                         
                         if accountForSliceSpacing
                         {
@@ -234,8 +232,8 @@ open class PieRadarChartRenderer: DataRenderer
                                     startAngle: startAngleOuter,
                                     sweepAngle: sweepAngleOuter)
                             
-                            let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
-                            let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                            let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle.DEG2RAD)
+                            let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle.DEG2RAD)
                             
                             path.addLine(
                                 to: CGPoint(
@@ -260,7 +258,7 @@ open class PieRadarChartRenderer: DataRenderer
                     
                     let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
                         0.0 :
-                        sliceSpace / (ChartUtils.Math.FDEG2RAD * radius )
+                        sliceSpace / radius.DEG2RAD
                     
                     let startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.0) * CGFloat(phaseY)
                     var sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * CGFloat(phaseY)
@@ -269,8 +267,8 @@ open class PieRadarChartRenderer: DataRenderer
                         sweepAngleOuter = 0.0
                     }
                     
-                    let arcStartPointX = center.x + radius * cos(startAngleOuter * ChartUtils.Math.FDEG2RAD)
-                    let arcStartPointY = center.y + radius * sin(startAngleOuter * ChartUtils.Math.FDEG2RAD)
+                    let arcStartPointX = center.x + radius * cos(startAngleOuter.DEG2RAD)
+                    let arcStartPointY = center.y + radius * sin(startAngleOuter.DEG2RAD)
                     
                     context.setFillColor(dataSet.color(atIndex: j).cgColor)
                     
@@ -279,7 +277,7 @@ open class PieRadarChartRenderer: DataRenderer
                     path.move(to: CGPoint(x: arcStartPointX,
                                           y: arcStartPointY))
                     
-                    path.addRelativeArc(center: center, radius: sliceRadius * webSection, startAngle: startAngleOuter * ChartUtils.Math.FDEG2RAD, delta: sweepAngleOuter * ChartUtils.Math.FDEG2RAD)
+                    path.addRelativeArc(center: center, radius: sliceRadius * webSection, startAngle: startAngleOuter.DEG2RAD, delta: sweepAngleOuter.DEG2RAD)
                     
                     if accountForSliceSpacing
                     {
@@ -295,8 +293,8 @@ open class PieRadarChartRenderer: DataRenderer
                                 startAngle: startAngleOuter,
                                 sweepAngle: sweepAngleOuter)
                         
-                        let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
-                        let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                        let arcEndPointX = center.x + sliceSpaceOffset * cos(angleMiddle.DEG2RAD)
+                        let arcEndPointY = center.y + sliceSpaceOffset * sin(angleMiddle.DEG2RAD)
                         
                         path.addLine(
                             to: CGPoint(
@@ -326,8 +324,7 @@ open class PieRadarChartRenderer: DataRenderer
     {
         guard
             let chart = chart,
-            let data = chart.data,
-            let animator = animator
+            let data = chart.data
             else { return }
         
         let center = chart.centerCircleBox
@@ -398,7 +395,7 @@ open class PieRadarChartRenderer: DataRenderer
                 
                 let sliceAngle = drawAngles[xIndex]
                 let sliceSpace = getSliceSpace(dataSet: dataSet)
-                let sliceSpaceMiddleAngle = sliceSpace / (ChartUtils.Math.FDEG2RAD * labelRadius)
+                let sliceSpaceMiddleAngle = sliceSpace / labelRadius.DEG2RAD
                 
                 // offset needed to center the drawn text in the slice
                 let angleOffset = (sliceAngle - sliceSpaceMiddleAngle / 2.0) / 2.0
@@ -414,8 +411,8 @@ open class PieRadarChartRenderer: DataRenderer
                     dataSetIndex: i,
                     viewPortHandler: viewPortHandler)
                 
-                let sliceXBase = cos(transformedAngle * ChartUtils.Math.FDEG2RAD)
-                let sliceYBase = sin(transformedAngle * ChartUtils.Math.FDEG2RAD)
+                let sliceXBase = cos(transformedAngle.DEG2RAD)
+                let sliceYBase = sin(transformedAngle.DEG2RAD)
                 
                 let drawXOutside = drawEntryLabels && xValuePosition == .outsideSlice
                 let drawYOutside = drawValues && yValuePosition == .outsideSlice
@@ -440,7 +437,7 @@ open class PieRadarChartRenderer: DataRenderer
                     line1Radius = radius * valueLinePart1OffsetPercentage
                     
                     let polyline2Length = dataSet.valueLineVariableLength
-                        ? labelRadius * valueLineLength2 * abs(sin(transformedAngle * ChartUtils.Math.FDEG2RAD))
+                        ? labelRadius * valueLineLength2 * abs(sin(transformedAngle.DEG2RAD))
                         : labelRadius * valueLineLength2
                     
                     let pt0 = CGPoint(
@@ -606,8 +603,7 @@ open class PieRadarChartRenderer: DataRenderer
     {
         guard
             let chart = chart,
-            let data = chart.data,
-            let animator = animator
+            let data = chart.data
             else { return }
         
         context.saveGState()
@@ -672,11 +668,11 @@ open class PieRadarChartRenderer: DataRenderer
             
             let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
                 0.0 :
-                sliceSpace / (ChartUtils.Math.FDEG2RAD * radius)
+                sliceSpace / radius.DEG2RAD
             
             let sliceSpaceAngleShifted = visibleAngleCount == 1 ?
                 0.0 :
-                sliceSpace / (ChartUtils.Math.FDEG2RAD * highlightedRadius)
+                sliceSpace / highlightedRadius.DEG2RAD
             
             let startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.0) * CGFloat(phaseY)
             var sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * CGFloat(phaseY)
@@ -694,11 +690,11 @@ open class PieRadarChartRenderer: DataRenderer
             
             let path = CGMutablePath()
             
-            path.move(to: CGPoint(x: center.x + highlightedRadius * cos(startAngleShifted * ChartUtils.Math.FDEG2RAD),
-                                  y: center.y + highlightedRadius * sin(startAngleShifted * ChartUtils.Math.FDEG2RAD)))
+            path.move(to: CGPoint(x: center.x + highlightedRadius * cos(startAngleShifted.DEG2RAD),
+                                  y: center.y + highlightedRadius * sin(startAngleShifted.DEG2RAD)))
             
-            path.addRelativeArc(center: center, radius: highlightedRadius, startAngle: startAngleShifted * ChartUtils.Math.FDEG2RAD,
-                                delta: sweepAngleShifted * ChartUtils.Math.FDEG2RAD)
+            path.addRelativeArc(center: center, radius: highlightedRadius, startAngle: startAngleShifted.DEG2RAD,
+                                delta: sweepAngleShifted.DEG2RAD)
             
             var sliceSpaceRadius: CGFloat = 0.0
             if accountForSliceSpacing
@@ -707,8 +703,8 @@ open class PieRadarChartRenderer: DataRenderer
                     center: center,
                     radius: radius,
                     angle: sliceAngle * CGFloat(phaseY),
-                    arcStartPointX: center.x + radius * cos(startAngleOuter * ChartUtils.Math.FDEG2RAD),
-                    arcStartPointY: center.y + radius * sin(startAngleOuter * ChartUtils.Math.FDEG2RAD),
+                    arcStartPointX: center.x + radius * cos(startAngleOuter.DEG2RAD),
+                    arcStartPointY: center.y + radius * sin(startAngleOuter.DEG2RAD),
                     startAngle: startAngleOuter,
                     sweepAngle: sweepAngleOuter)
             }
@@ -717,8 +713,8 @@ open class PieRadarChartRenderer: DataRenderer
             {
                 let angleMiddle = startAngleOuter + sweepAngleOuter / 2.0
                 
-                let arcEndPointX = center.x + sliceSpaceRadius * cos(angleMiddle * ChartUtils.Math.FDEG2RAD)
-                let arcEndPointY = center.y + sliceSpaceRadius * sin(angleMiddle * ChartUtils.Math.FDEG2RAD)
+                let arcEndPointX = center.x + sliceSpaceRadius * cos(angleMiddle.DEG2RAD)
+                let arcEndPointY = center.y + sliceSpaceRadius * sin(angleMiddle.DEG2RAD)
                 
                 path.addLine(
                     to: CGPoint(
