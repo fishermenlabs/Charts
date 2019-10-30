@@ -25,7 +25,7 @@ open class AxisBase: ComponentBase
     private var _axisValueFormatter: IAxisValueFormatter?
     
     @objc open var labelFont = NSUIFont.systemFont(ofSize: 10.0)
-    @objc open var labelTextColor = NSUIColor.black
+    @objc open var labelTextColor = NSUIColor.labelOrBlack
     
     @objc open var axisLineColor = NSUIColor.gray
     @objc open var axisLineWidth = CGFloat(0.5)
@@ -261,14 +261,8 @@ open class AxisBase: ComponentBase
     /// Removes the specified ChartLimitLine from the axis.
     @objc open func removeLimitLine(_ line: ChartLimitLine)
     {
-        for i in 0 ..< _limitLines.count
-        {
-            if _limitLines[i] === line
-            {
-                _limitLines.remove(at: i)
-                return
-            }
-        }
+        guard let i = _limitLines.firstIndex(of: line) else { return }
+        _limitLines.remove(at: i)
     }
     
     /// Removes all LimitLines from the axis.
