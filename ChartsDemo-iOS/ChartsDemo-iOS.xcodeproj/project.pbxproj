@@ -14,6 +14,10 @@
 		068A9B191FBBF351003CF1AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B8EAF2F1AB32E15009697AA /* Images.xcassets */; };
 		068A9B1A1FBBF355003CF1AD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B64D06EA1FB199130067418D /* Launch Screen.storyboard */; };
 		068A9B1B1FBBF366003CF1AD /* radar_marker@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B613DA31D526AD5000F1E98 /* radar_marker@3x.png */; };
+		09EE16B4236A340E00055205 /* PieRadarChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EE16B3236A340E00055205 /* PieRadarChartViewController.swift */; };
+		09EE16B5236A340E00055205 /* PieRadarChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EE16B3236A340E00055205 /* PieRadarChartViewController.swift */; };
+		09EE16B8236A34AD00055205 /* PieRadarChartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09EE16B7236A34AD00055205 /* PieRadarChartViewController.xib */; };
+		09EE16B9236A34AD00055205 /* PieRadarChartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09EE16B7236A34AD00055205 /* PieRadarChartViewController.xib */; };
 		225B36201F6EB9A50005B3D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225B361F1F6EB9A50005B3D5 /* AppDelegate.swift */; };
 		225B36311F6EB9EE0005B3D5 /* DemoBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225B362F1F6EB9EE0005B3D5 /* DemoBaseViewController.swift */; };
 		225B36321F6EB9EE0005B3D5 /* DemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225B36301F6EB9EE0005B3D5 /* DemoListViewController.swift */; };
@@ -199,6 +203,8 @@
 		0439A3521C9FF95F00496F83 /* PiePolylineChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PiePolylineChartViewController.m; sourceTree = "<group>"; };
 		0471CBFB1CA1090A00E52DBC /* PiePolylineChartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PiePolylineChartViewController.xib; sourceTree = "<group>"; };
 		0630AE391D8126C0008859B0 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = ../Charts.xcodeproj; sourceTree = "<group>"; };
+		09EE16B3236A340E00055205 /* PieRadarChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieRadarChartViewController.swift; sourceTree = "<group>"; };
+		09EE16B7236A34AD00055205 /* PieRadarChartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PieRadarChartViewController.xib; sourceTree = "<group>"; };
 		225B361D1F6EB9A50005B3D5 /* ChartsDemo-iOS-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChartsDemo-iOS-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		225B361F1F6EB9A50005B3D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		225B362F1F6EB9EE0005B3D5 /* DemoBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoBaseViewController.swift; sourceTree = "<group>"; };
@@ -416,6 +422,7 @@
 				225B364C1F6EBA410005B3D5 /* ScatterChartViewController.swift */,
 				225B36591F6EBA410005B3D5 /* SinusBarChartViewController.swift */,
 				225B364D1F6EBA410005B3D5 /* StackedBarChartViewController.swift */,
+				09EE16B3236A340E00055205 /* PieRadarChartViewController.swift */,
 			);
 			path = Demos;
 			sourceTree = "<group>";
@@ -433,6 +440,7 @@
 		227136F61F6EB69D006D2A11 /* Demos */ = {
 			isa = PBXGroup;
 			children = (
+				09EE16B7236A34AD00055205 /* PieRadarChartViewController.xib */,
 				5BEAED111ABBFB2B0013F194 /* AnotherBarChartViewController.xib */,
 				5BD47E641ABB424E008FCEC6 /* BarChartViewController.xib */,
 				55E3564D1ADC638F00A57971 /* BubbleChartViewController.xib */,
@@ -732,6 +740,7 @@
 				225B36811F6EBA640005B3D5 /* MultipleBarChartViewController.xib in Resources */,
 				225B367D1F6EBA640005B3D5 /* LineChart1ViewController.xib in Resources */,
 				068A9B1B1FBBF366003CF1AD /* radar_marker@3x.png in Resources */,
+				09EE16B9236A34AD00055205 /* PieRadarChartViewController.xib in Resources */,
 				225B36721F6EBA5E0005B3D5 /* DemoListViewController.xib in Resources */,
 				225B36891F6EBA640005B3D5 /* ScatterChartViewController.xib in Resources */,
 				225B36851F6EBA640005B3D5 /* PiePolylineChartViewController.xib in Resources */,
@@ -768,6 +777,7 @@
 				5B613DA41D526AD5000F1E98 /* radar_marker@3x.png in Resources */,
 				5BE7E7631C693098000A0377 /* PositiveNegativeBarChartViewController.xib in Resources */,
 				5B0CC7861ABB875400665592 /* PieChartViewController.xib in Resources */,
+				09EE16B8236A34AD00055205 /* PieRadarChartViewController.xib in Resources */,
 				5BEAED1C1ABBFB340013F194 /* ScatterChartViewController.xib in Resources */,
 				0471CBFC1CA1090A00E52DBC /* PiePolylineChartViewController.xib in Resources */,
 				5BD8F0751AB89CE500566E05 /* LineChart1ViewController.xib in Resources */,
@@ -823,6 +833,7 @@
 				225B36681F6EBA470005B3D5 /* AnotherBarChartViewController.swift in Sources */,
 				225B36621F6EBA470005B3D5 /* NegativeStackedBarChartViewController.swift in Sources */,
 				225B363B1F6EBA040005B3D5 /* LargeValueFormatter.swift in Sources */,
+				09EE16B5236A340E00055205 /* PieRadarChartViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +845,7 @@
 				5BEAED1B1ABBFB340013F194 /* ScatterChartViewController.m in Sources */,
 				5B0CC7851ABB875400665592 /* PieChartViewController.m in Sources */,
 				0439A3541C9FF95F00496F83 /* PiePolylineChartViewController.m in Sources */,
+				09EE16B4236A340E00055205 /* PieRadarChartViewController.swift in Sources */,
 				5B57BBBB1A9B26AA0036A6CC /* DemoListViewController.m in Sources */,
 				5BD47E651ABB424E008FCEC6 /* BarChartViewController.m in Sources */,
 				5BDEDC471ABB871E007D3A60 /* CombinedChartViewController.m in Sources */,
